@@ -34,7 +34,7 @@ public class AddPatient implements Command {
         parameters[3] = scn.next();
         scn.nextLine();
 
-        System.out.println("input department: ");
+        System.out.println("input department name: ");
         parameters[4] = scn.next();
         scn.nextLine();
         return parameters;

@@ -56,11 +56,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void remove(int id) {
         departmentRepository.remove(id);
+        patientRepository.deletePatientsWithDepartmentId(id);
     }
 
     @Override
     public void removeAll() {
         departmentRepository.removeAll();
+        patientRepository.removeAll();
     }
 
     @Override

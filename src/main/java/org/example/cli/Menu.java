@@ -12,6 +12,7 @@ import org.example.cli.Get.GetDepartmentById;
 import org.example.cli.Get.GetPatientById;
 import org.example.cli.Update.UpdatePatient;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
@@ -36,7 +37,13 @@ public class Menu {
             for (int i = 1; i <= commands.length; i++) {
                 System.out.println(i + " " + commands[i - 1].getCommandName());
             }
-            int inputCommand = scn.nextInt();
+            int inputCommand = 0;
+            try {
+                inputCommand = scn.nextInt();
+            } catch (InputMismatchException ime){
+                System.out.println("wrong command");
+                continue;
+            }
 
             if(inputCommand == -1){
                 System.out.println("Program execute with exit code 130");

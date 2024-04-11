@@ -36,10 +36,13 @@ public class PatientRepositoryImpl implements PatientRepository {
     }
 
     @Override
+    public void deletePatientsWithDepartmentId(int departmentId) {
+
+    }
+
+    @Override
     public void add(Patient object) {
-
         patients.add(object);
-
     }
 
     @Override
@@ -63,7 +66,8 @@ public class PatientRepositoryImpl implements PatientRepository {
         for (i = 0; i < patients.size(); i++) {
             if (patients.get(i).getPatientId() == id) {
                 patients.set(i, newObject);
-                departmentRepository.getDepartmentById(newObject.getDepartmentId());
+                Department newDep = departmentRepository.getDepartmentById(newObject.getDepartmentId());
+                newDep.setPatient(newObject);
                 return;
             }
         }

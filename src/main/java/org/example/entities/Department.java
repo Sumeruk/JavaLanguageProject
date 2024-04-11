@@ -54,15 +54,6 @@ public class Department {
         this.patients = patients;
     }
 
-    public void updatePatient(int id, Patient patient){
-        for (int i = 0; i < patients.size(); i++) {
-            if(patients.get(i).getPatientId() == id){
-                patients.set(i, patient);
-                return;
-            }
-        }
-    }
-
     @Override
     public String toString() {
         return "\n Department{" +

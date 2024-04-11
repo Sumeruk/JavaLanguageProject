@@ -45,13 +45,14 @@ public class PatientServiceImpl implements PatientService {
     }
 
     private Patient createNewPatient(int patientId, String FIO, int age, String gender, String departmentName) {
-        int departmentId = 0;
+        int departmentId;
         try {
             departmentId = departmentRepository.getDepartmentByName(departmentName).getId();
+            return new Patient(patientId, FIO, age, Gender.valueOf(gender), departmentId);
         } catch (NullPointerException npe) {
             System.out.println("Can't find department with name " + departmentName);
         }
-        return new Patient(patientId, FIO, age, Gender.valueOf(gender), departmentId);
+        return null;
     }
 
     @Override
@@ -59,8 +60,9 @@ public class PatientServiceImpl implements PatientService {
         Patient newPatient = setInfoForNewPatient(parameters);
         if(newPatient != null) {
             try {
-                patientRepository.add(newPatient);
                 departmentRepository.getDepartmentById(newPatient.getDepartmentId()).setPatient(newPatient);
+                patientRepository.add(newPatient);
+
             } catch (NullPointerException npe){
                 System.out.println("Cannot find this department");
             }
@@ -112,8 +114,10 @@ public class PatientServiceImpl implements PatientService {
         Patient newPatient = setInfoForNewPatient(Arrays.copyOfRange(parameters, 1, parameters.length));
         if(newPatient != null) {
             try{
+                departmentRepository.updatePatient(newPatient);
+                departmentRepository.deletePatientFromDepartment(
+                        patientRepository.getById(id).getDepartmentId(), id);
                 patientRepository.update(id, newPatient);
-                departmentRepository.getDepartmentById(newPatient.getDepartmentId()).updatePatient(id, newPatient);
             } catch (NullPointerException npe){
                 System.out.println("No department with this name");
             }

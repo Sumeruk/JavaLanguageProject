@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface PatientRepository extends Repository<Patient, Integer>{
     List<Patient> getPatientsByDepartmentId(int departmentId);
+
+    void deletePatientsWithDepartmentId(int departmentId);
 }

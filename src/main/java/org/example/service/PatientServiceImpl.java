@@ -10,6 +10,7 @@ import org.example.repository.PatientRepositoryImpl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class PatientServiceImpl implements PatientService {
@@ -23,7 +24,7 @@ public class PatientServiceImpl implements PatientService {
     private int setId() {
         try {
             return scn.nextInt();
-        } catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe) {
             System.out.println("Impossible id");
             System.out.println("Write id again");
         }
@@ -44,41 +45,29 @@ public class PatientServiceImpl implements PatientService {
         departmentRepository = DepartmentRepositoryImpl.getInstance();
     }
 
-    private Patient createNewPatient(int patientId, String FIO, int age, String gender, String departmentName) {
-        int departmentId;
-        try {
-            departmentId = departmentRepository.getDepartmentByName(departmentName).getId();
-            return new Patient(patientId, FIO, age, Gender.valueOf(gender), departmentId);
-        } catch (NullPointerException npe) {
-            System.out.println("Can't find department with name " + departmentName);
-        }
-        return null;
-    }
-
     @Override
     public void add(String[] parameters) {
         Patient newPatient = setInfoForNewPatient(parameters);
-        if(newPatient != null) {
-            try {
-                departmentRepository.getDepartmentById(newPatient.getDepartmentId()).setPatient(newPatient);
-                patientRepository.add(newPatient);
-
-            } catch (NullPointerException npe){
-                System.out.println("Cannot find this department");
-            }
+        if (newPatient != null) {
+            patientRepository.add(newPatient);
+            int currNum = departmentRepository.getById(newPatient.getDepartmentId()).getNumOfPatients();
+            departmentRepository.getById(newPatient.getDepartmentId()).setNumOfPatients(++currNum);
         }
     }
 
     private Patient setInfoForNewPatient(String[] parameters) {
         try {
-            int patientId = Integer.parseInt(parameters[0]);
-            String FIO = parameters[1];
-            int age = Integer.parseInt(parameters[2]);
-            String gender = parameters[3];
-            String departmentName = parameters[4];
-            return createNewPatient(patientId, FIO, age, gender, departmentName);
-        } catch (IllegalArgumentException iae){
+            Patient newPatient = new Patient();
+            newPatient.setPatientId(Integer.parseInt(parameters[0]));
+            newPatient.setFIO(parameters[1]);
+            newPatient.setAge(Short.parseShort(parameters[2]));
+            newPatient.setGender(Gender.valueOf(parameters[3]));
+            newPatient.setDepartmentId(departmentRepository.getDepartmentByName(parameters[4]).getId());
+            return newPatient;
+        } catch (IllegalArgumentException iae) {
             System.out.println("Wrong input parameters");
+        } catch (NullPointerException npe) {
+            System.out.println("Cannot find this department");
         }
 
         return null;
@@ -86,40 +75,23 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public void remove(int id) {
-        List<Patient> patients = departmentRepository.getDepartmentById(
-                patientRepository.getById(id).getDepartmentId()).getPatients();
-
-        for (int i = 0; i < patients.size(); i++) {
-            if (patients.get(i).getPatientId() == id){
-                patients.remove(i);
-                break;
-            }
-        }
-
-        departmentRepository.getDepartmentById(
-                patientRepository.getById(id).getDepartmentId()).setAllPatients(patients);
-
         patientRepository.remove(id);
     }
 
     @Override
     public void removeAll() {
         patientRepository.removeAll();
-        departmentRepository.deletePatientsFromDepartments();
     }
 
     @Override
     public void update(String[] parameters) {
         int id = Integer.parseInt(parameters[0]);
         Patient newPatient = setInfoForNewPatient(Arrays.copyOfRange(parameters, 1, parameters.length));
-        if(newPatient != null) {
-            try{
-                departmentRepository.updatePatient(newPatient);
-                departmentRepository.deletePatientFromDepartment(
-                        patientRepository.getById(id).getDepartmentId(), id);
+        if (newPatient != null) {
+            try {
                 patientRepository.update(id, newPatient);
-            } catch (NullPointerException npe){
-                System.out.println("No department with this name");
+            } catch (NoSuchElementException noElemExc) {
+                System.out.println("No patient with this id");
             }
 
         }

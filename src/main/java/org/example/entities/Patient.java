@@ -11,6 +11,14 @@ public class Patient {
     private Gender gender;
     private int departmentId;
 
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
+    }
+
     public int getDepartmentId() {
         return departmentId;
     }

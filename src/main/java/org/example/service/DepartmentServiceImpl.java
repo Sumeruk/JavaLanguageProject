@@ -34,7 +34,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             int departmentId = Integer.parseInt(parameters[0]);
             String name = parameters[1];
             return new Department(departmentId, name, 0);
-        } catch (Exception e) {
+        } catch (NumberFormatException nfe) {
             System.out.println("Wrong parameters for department");
         }
         return null;
@@ -42,7 +42,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department getDepartmentByName(String name) {
-        return null;
+        return departmentRepository.getDepartmentByName(name);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void remove(int id) {
         departmentRepository.remove(id);
-        patientRepository.deletePatientsWithDepartmentId(id);
+        patientRepository.deletePatientsByDepartmentId(id);
     }
 
     @Override
@@ -71,13 +71,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department newDepartment = setInfoForNewDepartment(Arrays.copyOfRange(parameters, 1, parameters.length));
         if(newDepartment != null) {
             departmentRepository.update(id, newDepartment);
-            patientRepository.getPatientsByDepartmentId(id);
+            patientRepository.updateDepartmentId(id, newDepartment.getId());
         }
     }
 
     @Override
     public Department getById(int id) {
-        return departmentRepository.getDepartmentById(id);
+        return departmentRepository.getById(id);
     }
 
     @Override

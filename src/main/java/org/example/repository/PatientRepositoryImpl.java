@@ -5,6 +5,7 @@ import org.example.entities.Patient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public class PatientRepositoryImpl implements PatientRepository {
@@ -36,8 +37,35 @@ public class PatientRepositoryImpl implements PatientRepository {
     }
 
     @Override
-    public void deletePatientsWithDepartmentId(int departmentId) {
+    public void update(int id, Patient patient) {
+        int i = 0;
+        for (; i < patients.size(); i++){
+            if(patients.get(i).getPatientId() == id){
+                patients.set(i, patient);
+            }
+        }
+        if (i == patients.size()){
+            throw new NoSuchElementException();
+        }
+    }
 
+    @Override
+    public void updateDepartmentId(int oldDepId, int newDepId){
+        for (int i = 0; i < patients.size(); i++) {
+            if(patients.get(i).getDepartmentId() == oldDepId){
+                patients.get(i).setPatientId(newDepId);
+            }
+        }
+    }
+
+    @Override
+    public void deletePatientsByDepartmentId(int departmentId) {
+        for (int i = 0; i < patients.size(); i++) {
+            if(patients.get(i).getDepartmentId() == departmentId){
+                patients.remove(i);
+                i--;
+            }
+        }
     }
 
     @Override
@@ -58,24 +86,6 @@ public class PatientRepositoryImpl implements PatientRepository {
     @Override
     public void removeAll() {
         patients.clear();
-    }
-
-    @Override
-    public void update(int id, Patient newObject) {
-        int i;
-        for (i = 0; i < patients.size(); i++) {
-            if (patients.get(i).getPatientId() == id) {
-                patients.set(i, newObject);
-                Department newDep = departmentRepository.getDepartmentById(newObject.getDepartmentId());
-                newDep.setPatient(newObject);
-                return;
-            }
-        }
-
-        if (i == patients.size()) {
-            System.out.println("No patient with this id");
-        }
-
     }
 
     @Override

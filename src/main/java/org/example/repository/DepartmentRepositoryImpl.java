@@ -10,6 +10,7 @@ import java.util.UUID;
 public class DepartmentRepositoryImpl implements DepartmentRepository {
 
     private static DepartmentRepository object;
+    private static PatientRepository patientRepository;
     private List<Department> departments;
 
     public DepartmentRepositoryImpl() {
@@ -24,69 +25,13 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     }
 
     @Override
-    public Department getDepartmentById(int departmentId) {
-        try {
-            for (int i = 0; i < departments.size(); i++) {
-                if (departments.get(i).getId() == departmentId) {
-                    return departments.get(i);
-                }
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Cannot find this department");
-        }
-        return null;
-    }
-
-    @Override
     public Department getDepartmentByName(String name) {
         for (Department department : departments) {
             if (department.getName().equals(name)) {
                 return department;
             }
         }
-        return new Department();
-    }
-
-    @Override
-    public void deletePatientsFromDepartments() {
-        for (int i = 0; i < departments.size(); i++) {
-            departments.get(i).setAllPatients(new ArrayList<>());
-        }
-    }
-
-    @Override
-    public void deletePatientFromDepartment(int departmentId, int patientId) {
-        for (int i = 0; i < departments.size(); i++) {
-            if (departments.get(i).getId() == departmentId) {
-                List<Patient> patients = departments.get(i).getPatients();
-                for (int j = 0; j < patients.size(); j++) {
-
-                    if (patients.get(j).getPatientId() == patientId) {
-                        patients.remove(j);
-                        departments.get(i).setAllPatients(patients);
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    public void updatePatient(Patient patient) {
-
-        for (int i = 0; i < departments.size(); i++) {
-            if (departments.get(i).getId() == patient.getDepartmentId()) {
-                List<Patient> patients = departments.get(i).getPatients();
-
-                for (int j = 0; j < patients.size(); j++) {
-                    if (patients.get(j).getPatientId() == patient.getPatientId()) {
-                        patients.set(j, patient);
-                        departments.get(i).setAllPatients(patients);
-                        return;
-                    }
-                }
-            }
-        }
-
+        return null;
     }
 
     @Override
@@ -126,10 +71,14 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
 
     @Override
     public Department getById(int id) {
-        for (Department department : departments) {
-            if (department.getId() == id) {
-                return department;
+        try {
+            for (int i = 0; i < departments.size(); i++) {
+                if (departments.get(i).getId() == id) {
+                    return departments.get(i);
+                }
             }
+        } catch (NullPointerException npe) {
+            System.out.println("Cannot find this department");
         }
         return null;
     }

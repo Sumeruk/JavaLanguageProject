@@ -33,7 +33,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         try {
             int departmentId = Integer.parseInt(parameters[0]);
             String name = parameters[1];
-            return new Department(departmentId, name, 0);
+            return new Department(departmentId, name);
         } catch (NumberFormatException nfe) {
             System.out.println("Wrong parameters for department");
         }

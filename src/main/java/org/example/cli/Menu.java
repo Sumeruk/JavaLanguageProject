@@ -1,5 +1,7 @@
 package org.example.cli;
 
+import org.example.BD.JDBC;
+import org.example.BD.JDBCImpl;
 import org.example.cli.Add.AddDepartment;
 import org.example.cli.Add.AddPatient;
 import org.example.cli.Delete.DeleteAllDepartments;
@@ -32,6 +34,8 @@ public class Menu {
     };
 
     public static void run(){
+        JDBC jdbc = JDBCImpl.getInstance();
+        jdbc.connection();
         while (true){
             System.out.println();
             for (int i = 1; i <= commands.length; i++) {
@@ -46,6 +50,7 @@ public class Menu {
             }
 
             if(inputCommand == -1){
+                jdbc.closeConnection();
                 System.out.println("Program execute with exit code 130");
                 return;
             }
@@ -58,5 +63,6 @@ public class Menu {
             commands[inputCommand - 1].execute();
 
         }
+
     }
 }

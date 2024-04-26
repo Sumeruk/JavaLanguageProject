@@ -1,20 +1,22 @@
 package org.example.repository;
 
+import org.example.BD.JDBC;
+import org.example.BD.JDBCImpl;
 import org.example.entities.Department;
-import org.example.entities.Patient;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class DepartmentRepositoryImpl implements DepartmentRepository {
 
     private static DepartmentRepository object;
     private static PatientRepository patientRepository;
-    private List<Department> departments;
+    private static JDBC jdbc = JDBCImpl.getInstance();
 
     public DepartmentRepositoryImpl() {
-        departments = new ArrayList<>();
     }
 
     public static DepartmentRepository getInstance() {
@@ -24,61 +26,113 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
         return object;
     }
 
-    @Override
-    public Department getDepartmentByName(String name) {
-        for (Department department : departments) {
-            if (department.getName().equals(name)) {
+    private Department getDepartmentFromSQL(ResultSet res){
+        try {
+            if (res.next()) {
+                Department department = new Department();
+                department.setId(res.getInt(1));
+                department.setName(res.getString(2));
                 return department;
             }
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
         }
+
+        return null;
+
+    }
+
+    private List<Department> getDepartmentsFromSQL(ResultSet res){
+        List<Department> departments = new ArrayList<>();
+        try {
+            while (res.next()) {
+                Department department = new Department();
+                department.setId(res.getInt(1));
+                department.setName(res.getString(2));
+                departments.add(department);
+            }
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
+        }
+
+        return departments;
+
+    }
+
+    @Override
+    public Department getDepartmentByName(String name) {
+        try{
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "Select * from department where name = '" + name + "';";
+            ResultSet res = statement.executeQuery(sql);
+            return getDepartmentFromSQL(res);
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
+        }
+
         return null;
     }
 
     @Override
     public void add(Department object) {
-        departments.add(object);
+        try{
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "insert into department values (" + object.getId()
+                    + ", '" + object.getName() + "');";
+            int res = statement.executeUpdate(sql);
+            System.out.println("добавлено " + res);
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
+        }
     }
 
     @Override
     public void remove(int id) {
-        for (int i = 0; i < departments.size(); i++) {
-            if (departments.get(i).getId() == id) {
-                departments.remove(i);
-                return;
-            }
+        try{
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "DELETE from department where id =" + id + ";";
+            int res = statement.executeUpdate(sql);
+            System.out.println("удалено " + res);
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
         }
     }
 
     @Override
     public void removeAll() {
-        departments.clear();
+        try{
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "DELETE from department;";
+            int res = statement.executeUpdate(sql);
+            System.out.println("удалено " + res);
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
+        }
     }
 
 
     @Override
     public void update(int id, Department newObject) {
-        int i;
-        for (i = 0; i < departments.size(); i++) {
-            if (departments.get(i).getId() == id) {
-                departments.set(i, newObject);
-                return;
-            }
-        }
-        if (i == departments.size()) {
-            System.out.println("No departments with this id");
+        try{
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "update department set id = "+ newObject.getId()
+                    + ", name = " + newObject.getName() + " where id = " + id;
+            int res = statement.executeUpdate(sql);
+            System.out.println("обновлено " + res);
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
         }
     }
 
     @Override
     public Department getById(int id) {
-        try {
-            for (int i = 0; i < departments.size(); i++) {
-                if (departments.get(i).getId() == id) {
-                    return departments.get(i);
-                }
-            }
-        } catch (NullPointerException npe) {
-            System.out.println("Cannot find this department");
+        try{
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "Select * from department where id = " + id + ";";
+            ResultSet res = statement.executeQuery(sql);
+            return getDepartmentFromSQL(res);
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
         }
         return null;
     }
@@ -86,6 +140,14 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
 
     @Override
     public List<Department> getAll() {
-        return departments;
+        try{
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "Select * from department;";
+            ResultSet res = statement.executeQuery(sql);
+            return getDepartmentsFromSQL(res);
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
+        }
+        return null;
     }
 }

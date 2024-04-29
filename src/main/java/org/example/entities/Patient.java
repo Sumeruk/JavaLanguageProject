@@ -74,10 +74,6 @@ public class Patient {
         this.gender = gender;
     }
 
-    public String getName() {
-        return FIO;
-    }
-
     public int getAge() {
         return age;
     }

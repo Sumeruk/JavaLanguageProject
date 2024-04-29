@@ -99,39 +99,95 @@ public class PatientRepositoryJDBCImpl implements PatientRepository {
 
     @Override
     public void updateDepartmentId(int oldDepId, int newDepId){
-
-
+        try{
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "update patient set department_id = " +
+                    newDepId +
+                    " where patient_id = " + oldDepId;
+            int res = statement.executeUpdate(sql);
+            System.out.println("обновлено " + res);
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
+            System.out.println(sqlE.getMessage());
+        }
     }
 
     @Override
     public void deletePatientsByDepartmentId(int departmentId) {
-
+        try{
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "DELETE FROM patient WHERE department_id = " + departmentId;
+            int res = statement.executeUpdate(sql);
+            System.out.println("удалено " + res);
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
+            System.out.println(sqlE.getMessage());
+        }
     }
+
 
     @Override
     public void add(Patient object) {
-
+        try{
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "insert into patient values (" + object.getPatientId()
+                    + ", '" + object.getFIO() + "', "  + object.getAge() +
+                    ", '" + object.getGender().toString() + "', " + object.getDepartmentId() + ");";
+            int res = statement.executeUpdate(sql);
+            System.out.println("добавлено " + res);
+        } catch (SQLException sqlE){
+            System.out.println("ошибка при выполнении запроса");
+        }
     }
 
     @Override
     public void remove(int id) {
-
+        try {
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "DELETE FROM patient WHERE patient_id = " + id;
+            int res = statement.executeUpdate(sql);
+            System.out.println("удалено " + res);
+        } catch (SQLException sqlE) {
+            System.out.println("ошибка при выполнении запроса");
+            System.out.println(sqlE.getMessage());
+        }
     }
-
     @Override
     public void removeAll() {
-
+        try {
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "DELETE FROM patient";
+            int res = statement.executeUpdate(sql);
+            System.out.println("удалено " + res);
+        } catch (SQLException sqlE) {
+            System.out.println("ошибка при выполнении запроса");
+            System.out.println(sqlE.getMessage());
+        }
     }
 
     @Override
     public Patient getById(int id) {
-
-
+        try {
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "Select * from patient where patient_id = " + id;
+            ResultSet res = statement.executeQuery(sql);
+            return getPatientFromSQL(res);
+        } catch (SQLException sqlE) {
+            System.out.println("ошибка при выполнении запроса");
+        }
         return null;
     }
 
     @Override
     public List<Patient> getAll() {
-        return new ArrayList<>();
+        try {
+            Statement statement = jdbc.getConnection().createStatement();
+            String sql = "Select * from patient";
+            ResultSet res = statement.executeQuery(sql);
+            return getPatientsFromSQL(res);
+        } catch (SQLException sqlE) {
+            System.out.println("ошибка при выполнении запроса");
+        }
+        return null;
     }
 }

@@ -13,10 +13,9 @@ import java.util.List;
 public class DepartmentRepositoryImpl implements DepartmentRepository {
 
     private static DepartmentRepository object;
-    private static PatientRepository patientRepository;
-    private static JDBC jdbc = JDBCImpl.getInstance();
+    private static final JDBC jdbc = JDBCImpl.getInstance();
 
-    public DepartmentRepositoryImpl() {
+    private DepartmentRepositoryImpl() {
     }
 
     public static DepartmentRepository getInstance() {

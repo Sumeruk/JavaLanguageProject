@@ -50,8 +50,6 @@ public class PatientServiceImpl implements PatientService {
         Patient newPatient = setInfoForNewPatient(parameters);
         if (newPatient != null) {
             patientRepository.add(newPatient);
-            int currNum = departmentRepository.getById(newPatient.getDepartmentId()).getNumOfPatients();
-            departmentRepository.getById(newPatient.getDepartmentId()).setNumOfPatients(++currNum);
         }
     }
 

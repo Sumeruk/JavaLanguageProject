@@ -10,17 +10,17 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DepartmentRepositoryImpl implements DepartmentRepository {
+public class DepartmentRepositoryJDBCImpl implements DepartmentRepository {
 
     private static DepartmentRepository object;
     private static final JDBC jdbc = JDBCImpl.getInstance();
 
-    private DepartmentRepositoryImpl() {
+    private DepartmentRepositoryJDBCImpl() {
     }
 
     public static DepartmentRepository getInstance() {
         if (object == null) {
-            object = new DepartmentRepositoryImpl();
+            object = new DepartmentRepositoryJDBCImpl();
         }
         return object;
     }

@@ -1,8 +1,6 @@
 package org.example.cli.Delete;
 
 import org.example.cli.Command;
-import org.example.repository.PatientRepositoryImpl;
-import org.example.service.DepartmentServiceImpl;
 import org.example.service.PatientService;
 import org.example.service.PatientServiceImpl;
 

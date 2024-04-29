@@ -3,7 +3,6 @@ package org.example.repository;
 import org.example.BD.JDBC;
 import org.example.BD.JDBCImpl;
 import org.example.Help.Gender;
-import org.example.entities.Department;
 import org.example.entities.Patient;
 
 import java.sql.ResultSet;
@@ -11,18 +10,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
-public class PatientRepositoryImpl implements PatientRepository {
+public class PatientRepositoryJDBCImpl implements PatientRepository {
     private static PatientRepository object;
     private static final JDBC jdbc = JDBCImpl.getInstance();
 
-    private PatientRepositoryImpl() {
+    private PatientRepositoryJDBCImpl() {
     }
 
     public static PatientRepository getInstance() {
         if (object == null) {
-            object = new PatientRepositoryImpl();
+            object = new PatientRepositoryJDBCImpl();
         }
         return object;
     }

@@ -1,18 +1,15 @@
 package org.example.service;
 
 import org.example.entities.Department;
-import org.example.entities.Patient;
 import org.example.repository.DepartmentRepository;
-import org.example.repository.DepartmentRepositoryImpl;
+import org.example.repository.DepartmentRepositoryJDBCImpl;
 import org.example.repository.PatientRepository;
-import org.example.repository.PatientRepositoryImpl;
+import org.example.repository.PatientRepositoryJDBCImpl;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class DepartmentServiceImpl implements DepartmentService {
-    private Scanner scn = new Scanner(System.in);
     private static DepartmentService departmentService;
     private DepartmentRepository departmentRepository;
     private PatientRepository patientRepository;
@@ -25,8 +22,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     private DepartmentServiceImpl() {
-        departmentRepository = DepartmentRepositoryImpl.getInstance();
-        patientRepository = PatientRepositoryImpl.getInstance();
+        departmentRepository = DepartmentRepositoryJDBCImpl.getInstance();
+        patientRepository = PatientRepositoryJDBCImpl.getInstance();
     }
 
     private Department setInfoForNewDepartment(String[] parameters) {

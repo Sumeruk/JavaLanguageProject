@@ -1,12 +1,11 @@
 package org.example.service;
 
 import org.example.Help.Gender;
-import org.example.entities.Department;
 import org.example.entities.Patient;
 import org.example.repository.DepartmentRepository;
-import org.example.repository.DepartmentRepositoryImpl;
+import org.example.repository.DepartmentRepositoryJDBCImpl;
 import org.example.repository.PatientRepository;
-import org.example.repository.PatientRepositoryImpl;
+import org.example.repository.PatientRepositoryJDBCImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +16,6 @@ public class PatientServiceImpl implements PatientService {
     private static PatientService patientService;
     private PatientRepository patientRepository;
     private DepartmentRepository departmentRepository;
-    private Patient patient;
 
     private Scanner scn = new Scanner(System.in);
 
@@ -41,8 +39,8 @@ public class PatientServiceImpl implements PatientService {
     }
 
     public PatientServiceImpl() {
-        patientRepository = PatientRepositoryImpl.getInstance();
-        departmentRepository = DepartmentRepositoryImpl.getInstance();
+        patientRepository = PatientRepositoryJDBCImpl.getInstance();
+        departmentRepository = DepartmentRepositoryJDBCImpl.getInstance();
     }
 
     @Override

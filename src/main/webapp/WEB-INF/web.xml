@@ -10,9 +10,30 @@
         <servlet-class>org.example.servlets.Servlets</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>PatientAddGetAll</servlet-name>
+        <servlet-class>org.example.servlets.PatientServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>DepartmentAddGetAll</servlet-name>
+        <servlet-class>org.example.servlets.DepartmentServlet</servlet-class>
+    </servlet>
+
+
     <servlet-mapping>
         <servlet-name>HelloWorld</servlet-name>
         <url-pattern>/myServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PatientAddGetAll</servlet-name>
+        <url-pattern>/patient</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DepartmentAddGetAll</servlet-name>
+        <url-pattern>/department</url-pattern>
     </servlet-mapping>
 
 </web-app>

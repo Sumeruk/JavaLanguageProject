@@ -1,8 +1,8 @@
 package org.example.servlets;
 
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.example.BD.JDBC;
 import org.example.BD.JDBCImpl;
 import org.example.entities.Patient;
@@ -36,8 +36,8 @@ public class PatientServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        JDBC jdbc = JDBCImpl.getInstance();
-        jdbc.connection();
+//        JDBC jdbc = JDBCImpl.getInstance();
+//        jdbc.connection();
         List<Patient> patients = patientService.getAll();
         JSONArray jsonArray= new JSONArray();
 
@@ -55,6 +55,6 @@ public class PatientServlet extends HttpServlet {
 
         String jsonResponse = jsonArray.toString();
         resp.getWriter().write(jsonResponse);
-        jdbc.closeConnection();
+        //jdbc.closeConnection();
     }
 }

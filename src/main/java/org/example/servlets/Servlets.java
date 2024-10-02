@@ -13,7 +13,6 @@ public class Servlets extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         resp.setContentType("application/json");
-
     }
 
     @Override

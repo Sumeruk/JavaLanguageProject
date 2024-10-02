@@ -20,6 +20,11 @@
         <servlet-class>org.example.servlets.DepartmentServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>DepartmentDeleteAll</servlet-name>
+        <servlet-class>org.example.servlets.DeleteAllDepartmentServlet</servlet-class>
+    </servlet>
+
 
     <servlet-mapping>
         <servlet-name>HelloWorld</servlet-name>
@@ -34,6 +39,11 @@
     <servlet-mapping>
         <servlet-name>DepartmentAddGetAll</servlet-name>
         <url-pattern>/department</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DepartmentDeleteAll</servlet-name>
+        <url-pattern>/department/deleteAll</url-pattern>
     </servlet-mapping>
 
 </web-app>

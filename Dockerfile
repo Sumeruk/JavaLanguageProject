@@ -1,26 +1,14 @@
-FROM maven:3.8.4-openjdk-11 AS builder
+# Использование официального образа Java в качестве базового изображения
+FROM tomcat:10.0
 
-# Устанавливаем рабочую директорию
-WORKDIR /app
+# Установка рабочего каталога в контейнере
+WORKDIR /usr/local/tomcat
 
-# Копируем файл pom.xml и зависимости
-COPY pom.xml .
-COPY src ./src
+# Копирование файла WAR в директорию webapps Tomcat
+COPY ./target/task1-16-1.0.war /usr/local/tomcat/webapps/
 
-# Скачиваем зависимости
-RUN mvn dependency:go-offline
+# Предоставление порта 8080 для доступа извне контейнера
+EXPOSE 8080
 
-# Собираем проект
-RUN mvn package
-
-# Используем базовый образ OpenJDK для запуска приложения
-FROM openjdk:11-jre-slim
-
-# Устанавливаем рабочую директорию
-WORKDIR /app
-
-# Копируем собранный JAR-файл из предыдущего этапа
-COPY --from=builder /app/target/*.jar app.jar
-
-# Указываем команду для запуска приложения
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Запуск сервера Tomcat
+CMD ["catalina.sh", "run"]
